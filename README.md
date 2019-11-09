@@ -1,2 +1,26 @@
 # Music-Receommendation-System
 Music Recommendation Systems using Apriori algorithm (for finding frequent song itemsets).
+
+## Data Source
+[taste_profile_song_to_tracks.txt](https://www.kaggle.com/c/msdchallenge/data)
+
+## Data Processing
+Please execute **DataProcessing.py** which can generate the following csv files from **taste_profile_song_to_tracks.txt**
+
+- byUser.csv
+```
+userid  songid
+userid1 song_id1,song_id2,song_id3,.....
+userid2 song_id1,song_id2,song_id3,.....
+....... ................................    
+....... ................................    
+```
+
+- bySong.csv
+```
+songid  userid
+songid1 user_id1,user_id2,user_id3,......
+songid2 user_id1,user_id2,user_id3,......
+....... .................................
+....... .................................
+```
