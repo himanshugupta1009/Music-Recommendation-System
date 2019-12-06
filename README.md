@@ -1,4 +1,5 @@
 # Music-Recommendation-System
-Music Recommendation Systems using Apriori algorithm (for finding frequent song itemsets). 
+
+Music Recommendation System using techniques for generating frequent itemsets. 
 
 #Author - Himanshu Gupta
