@@ -68,7 +68,11 @@ def main():
 
 	outputFile = open("similarity.txt", "w")
 
+	count = 0
+	total = len(uniqueSongId)
 	for id in uniqueSongId:
+		count += 1
+		print(str(100*count/total) + "%")
 		output = getSimilarity(id)
 		if len(output) != 0:
 			line = ', '.join(output)
