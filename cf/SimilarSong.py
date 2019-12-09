@@ -2,27 +2,14 @@ import operator
 from pprint import pprint
 
 from cf import MSD_util, MSD_rec
+import copy
 
 
 # Return similar songid list with descending order
-def getSimilarity(songId):
-	f_triplets_tr = "train_triplets.txt"
-
-	s2u_tr = MSD_util.song_to_users(f_triplets_tr)
-	_A = 0.15
-	_Q = 3
-	pr = MSD_rec.PredSI(s2u_tr, _A, _Q)
-
+def getSimilarity(songId, uniqeSongIds, pr):
 	uniqSongId2Score = dict()
 
-	f = open('kaggle_songs.txt', 'r')
-	line = f.readline()
-	while line:
-		uniqSongId2Score[line.split(" ")[0]] = 0
-		line = f.readline()
-	f.close()
-
-	for uSong in uniqSongId2Score.keys():
+	for uSong in uniqeSongIds:
 		try:
 			score = pr.Match(songId, uSong)
 			if score != 0:
@@ -58,6 +45,17 @@ def getSimilarity(songId):
 
 
 def main():
+
+
+	# Prepare for match
+	f_triplets_tr = "train_triplets.txt"
+	s2u_tr = MSD_util.song_to_users(f_triplets_tr)
+	_A = 0.15
+	_Q = 3
+	pr = MSD_rec.PredSI(s2u_tr, _A, _Q)
+
+
+
 	uniqueSongId = []
 	f = open('kaggle_songs.txt', 'r')
 	line = f.readline()
@@ -73,13 +71,14 @@ def main():
 	for id in uniqueSongId:
 		count += 1
 		print(str(100*count/total) + "%")
-		output = getSimilarity(id)
+		songIds = copy.deepcopy(uniqueSongId)
+		output = getSimilarity(id, songIds, pr)
 		if len(output) != 0:
 			line = ', '.join(output)
 			line = id + ", {" + line + "}"
 			print(line)
-			outputFile.write("\n")
 			outputFile.write(line)
+			outputFile.write("\n")
 	outputFile.close()
 
 
