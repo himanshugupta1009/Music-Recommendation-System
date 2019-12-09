@@ -1,10 +1,11 @@
-from cf import MSD_util, MSD_rec
-from pprint import pprint
 import operator
+from pprint import pprint
+
+from cf import MSD_util, MSD_rec
 
 
 # Return similar songid list with descending order
-def similarity(songId):
+def getSimilarity(songId):
 	f_triplets_tr = "train_triplets.txt"
 
 	s2u_tr = MSD_util.song_to_users(f_triplets_tr)
@@ -38,10 +39,13 @@ def similarity(songId):
 		del uniqSongId2Score[key]
 
 	# Delete own element (songId's)
-	del uniqSongId2Score[songId]
+	try:
+		del uniqSongId2Score[songId]
+	except:
+		pass
 
 	# Sort by score with descending order
-	sortedList = sorted(uniqSongId2Score.items(),  key=operator.itemgetter(1))
+	sortedList = sorted(uniqSongId2Score.items(), key=operator.itemgetter(1))
 	sortedList.reverse()
 
 	# Extract songid
@@ -51,9 +55,35 @@ def similarity(songId):
 	return songList
 
 
-output = similarity("SOIJTCX12A6D4F8247")
 
-pprint(output)
+
+def main():
+	uniqueSongId = []
+	f = open('kaggle_songs.txt', 'r')
+	line = f.readline()
+	while line:
+		uniqueSongId.append(line.split(" ")[0])
+		line = f.readline()
+	f.close()
+
+	outputFile = open("similarity.txt", "w")
+
+	for id in uniqueSongId:
+		output = getSimilarity(id)
+		if len(output) != 0:
+			line = ', '.join(output)
+			line = id + ", {" + line + "}"
+			print(line)
+			outputFile.write("\n")
+			outputFile.write(line)
+	outputFile.close()
+
+
+
+if __name__=="__main__":
+	main()
+
+
 
 
 
